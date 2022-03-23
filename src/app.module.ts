@@ -27,7 +27,7 @@ import postgresConfig from './config/postgres.config';
         password: configService.get('postgres.PASSWORD'),
         database: configService.get('postgres.DATABASE'),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize: false,
+        synchronize: true,
       }),
     }),
   ],
