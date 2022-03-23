@@ -1,10 +1,10 @@
 export default (): Record<string, unknown> => ({
-  redis: {
-    name: 'postgres',
-    host: process.env.POSTGRES_HOST,
-    port: parseInt(process.env.POSTGRES_PORT),
-    user: parseInt(process.env.POSTGRES_USER),
-    password: parseInt(process.env.POSTGRES_PASSWORD),
-    db: parseInt(process.env.POSTGRES_DB),
+  postgres: {
+    NAME: 'postgres',
+    HOST: process.env.POSTGRES_HOST,
+    PORT: parseInt(process.env.POSTGRES_PORT),
+    USER: process.env.POSTGRES_USER,
+    PASSWORD: process.env.POSTGRES_PASSWORD,
+    DATABASE: process.env.POSTGRES_DB,
   },
 });

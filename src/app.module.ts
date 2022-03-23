@@ -3,7 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import validationSchema from './config/configs.schema';
 import postgresConfig from './config/postgres.config';
 @Module({
@@ -15,15 +15,20 @@ import postgresConfig from './config/postgres.config';
       validationSchema: validationSchema,
       load: [postgresConfig],
     }),
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: '123456',
-      database: 'dixio',
-      entities: [],
-      synchronize: true,
+
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        type: 'postgres',
+        host: configService.get('postgres.HOST'),
+        port: +configService.get<number>('postgres.PORT'),
+        username: configService.get('postgres.USER'),
+        password: configService.get('postgres.PASSWORD'),
+        database: configService.get('postgres.DATABASE'),
+        entities: [__dirname + '/**/*.entity{.ts,.js}'],
+        synchronize: false,
+      }),
     }),
   ],
   controllers: [AppController],
