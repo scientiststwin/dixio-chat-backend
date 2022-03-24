@@ -14,11 +14,18 @@ export class ChatService {
   defaultChatName = 'public-chat';
 
   async joinChat(client: Socket, name: string) {
-    const userObject = await this.userRepository.createNewUser(name);
+    try {
+      const userObject = await this.userRepository.createNewUser(name);
 
-    client['user'] = { id: userObject.id, name: userObject.name };
-    client.join(this.defaultChatName);
-    client.emit('join', 'you join to chat successfully');
+      client['user'] = { id: userObject.id, name: userObject.name };
+      client.join(this.defaultChatName);
+      client.emit('join', 'you join to chat successfully');
+    } catch (error) {
+      client.emit(
+        'warn',
+        'some thing unexpected happened! Maybe you entered duplicate name',
+      );
+    }
   }
 
   async newMessage(
@@ -26,23 +33,27 @@ export class ChatService {
     message: string,
     user: { id: number; name: string },
   ) {
-    const messageObject = await this.messageRepository.createMessage(
-      user.id,
-      message,
-    );
+    try {
+      const messageObject = await this.messageRepository.createMessage(
+        user.id,
+        message,
+      );
 
-    const newMessage = {
-      message: {
-        id: messageObject.id,
-        message_content: messageObject.message_content,
-      },
-      owner: {
-        id: user.id,
-        name: user.name,
-      },
-    };
+      const newMessage = {
+        message: {
+          id: messageObject.id,
+          message_content: messageObject.message_content,
+        },
+        owner: {
+          id: user.id,
+          name: user.name,
+        },
+      };
 
-    client.emit('message', newMessage);
-    client.to(this.defaultChatName).emit('message', newMessage);
+      client.emit('message', newMessage);
+      client.to(this.defaultChatName).emit('message', newMessage);
+    } catch (err) {
+      client.emit('warn', 'some thing unexpected happened!');
+    }
   }
 }
