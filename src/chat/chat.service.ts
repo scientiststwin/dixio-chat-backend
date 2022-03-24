@@ -21,10 +21,10 @@ export class ChatService {
       client.join(this.defaultChatName);
       client.emit('join', 'you join to chat successfully');
     } catch (error) {
-      client.emit(
-        'warn',
-        'some thing unexpected happened! Maybe you entered duplicate name',
-      );
+      client.emit('warn', {
+        message:
+          'some thing unexpected happened! Maybe you entered duplicate name',
+      });
     }
   }
 
@@ -52,8 +52,10 @@ export class ChatService {
 
       client.emit('message', newMessage);
       client.to(this.defaultChatName).emit('message', newMessage);
-    } catch (err) {
-      client.emit('warn', 'some thing unexpected happened!');
+    } catch (error) {
+      client.emit('warn', {
+        message: 'some thing unexpected happened!',
+      });
     }
   }
 }
