@@ -17,20 +17,7 @@ import postgresConfig from './config/postgres.config';
       load: [postgresConfig],
     }),
 
-    TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
-        host: configService.get('postgres.HOST'),
-        port: +configService.get<number>('postgres.PORT'),
-        username: configService.get('postgres.USER'),
-        password: configService.get('postgres.PASSWORD'),
-        database: configService.get('postgres.DATABASE'),
-        entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize: true,
-      }),
-    }),
+    TypeOrmModule.forRoot({ autoLoadEntities: true }),
 
     ChatModule,
   ],

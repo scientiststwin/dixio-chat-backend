@@ -9,7 +9,7 @@ import { Server, Socket } from 'socket.io';
 import { ChatService } from './chat.service';
 
 @WebSocketGateway(8000, { namespace: '/chat' })
-export class ChatGateway implements OnGatewayDisconnect, OnGatewayConnection {
+export class ChatGateway implements OnGatewayConnection {
   constructor(private readonly chatService: ChatService) {}
 
   @WebSocketServer() wss: Server;
@@ -17,8 +17,6 @@ export class ChatGateway implements OnGatewayDisconnect, OnGatewayConnection {
   handleConnection(client: any, payload: any) {
     client.emit('status', 'connected');
   }
-
-  handleDisconnect() {}
 
   @SubscribeMessage('join')
   joinChat(client: Socket, payload: any) {
