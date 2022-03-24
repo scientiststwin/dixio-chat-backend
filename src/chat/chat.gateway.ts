@@ -14,7 +14,9 @@ export class ChatGateway implements OnGatewayDisconnect, OnGatewayConnection {
 
   @WebSocketServer() wss: Server;
 
-  handleConnection(client: any, payload: any) {}
+  handleConnection(client: any, payload: any) {
+    client.emit('status', 'connected');
+  }
 
   handleDisconnect() {}
 
