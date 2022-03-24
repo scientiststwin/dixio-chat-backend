@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ChatModule } from './chat/chat.module';
 import validationSchema from './config/configs.schema';
 import postgresConfig from './config/postgres.config';
 @Module({
@@ -30,6 +31,8 @@ import postgresConfig from './config/postgres.config';
         synchronize: true,
       }),
     }),
+
+    ChatModule,
   ],
   controllers: [AppController],
   providers: [AppService],
