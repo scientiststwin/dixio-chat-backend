@@ -17,7 +17,6 @@ export class ChatService {
     const userObject = await this.userRepository.createNewUser(name);
 
     client['user'] = { id: userObject.id, name: userObject.name };
-    console.log(client['user']);
     client.join(this.defaultChatName);
     client.emit('join', 'you join to chat successfully');
   }
